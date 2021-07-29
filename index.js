@@ -1,6 +1,9 @@
+"use strict";
+
 let express = require('express');
 let app = express();
 const exphbs = require('express-handlebars');
+const helpers = require('handlebars-helpers')();
 const bodyParser = require('body-parser');
 const handlebarSetup = exphbs({
   partialsDir: "./views/partials",
@@ -24,31 +27,43 @@ app.use(bodyParser.json());
 app.engine('handlebars', handlebarSetup);
 app.set('view engine', 'handlebars');
 
+helpers.toFixed = function(totals){
+  return (totals).toFixed(2);
+}
+
+helpers.limit = function(totals){
+
+  if (settingsBill.hasReachedCriticalLevel()){
+    
+    return limit(totals);
+  }
+}
+
 
 //reference the handlebar file: index.handlebars
 app.get('/', function (req, res) {
 
-  res.render('index', {
-    settings: settingsBill.getSettings(),
-    totals: settingsBill.totals(),
-    totals: settingsBill.totalClass()
+  if (settingsBill.hasReachedCriticalLevel()) {
+    res.render('index', {
+      settings: settingsBill.getSettings(),
+      totals: settingsBill.totals(),
+      class: "danger"
+    });
+  } else if (settingsBill.hasReachedWarningLevel()) {
+    res.render('index', {
+      settings: settingsBill.getSettings(),
+      totals: settingsBill.totals(),
+      class: "warning"
+    });
+  } else {
+    res.render('index', {
+      settings: settingsBill.getSettings(),
+      totals: settingsBill.totals(),
+    });
+  }
 
-  });
-
-});
-
-app.post('/className', function (req, res) {
-
-  settingsBill.totalClass({
-    callTotalSettings: req.body.callTotalSettings,
-    smsTotalSettings: req.body.smsTotalSettings,
-    totalSettings: req.body.totalSettings
-  })
-
-  res.redirect('/');
-});
-
-
+  
+})
 
 
 app.post('/settings', function (req, res) {

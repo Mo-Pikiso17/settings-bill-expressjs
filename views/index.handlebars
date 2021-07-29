@@ -43,29 +43,26 @@
                         </form>
 
                         <h5>Totals</h5>
-                        <form action="/className" method="POST">
-
                         <table>
                             <tr>
                                 <td>
                                     <a href="/actions/call">Call total</a>
                                 </td>
-                                <td>R<span class="callTotalSettings" name='callTotalSettings'>{{totals.callTotal}}</span> </td>
+                                <td>R<span class="callTotalSettings">{{toFixed totals.callTotal 2}}</span> </td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="/actions/sms">SMS total</a>
                                 </td>
-                                <td>R<span class="smsTotalSettings" name='smsTotalSettings'>{{totals.smsTotal}}</span> </td>
+                                <td>R<span class="smsTotalSettings">{{toFixed totals.smsTotal 2}}</span> </td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="/actions">Total</a>
                                 </td>
-                                <td> R<span class="totalSettings" name='totalSettings'>{{totals.grandTotal}}</span> </td>
+                                <td> R<span class="totalSettings {{class}}" >{{toFixed totals.grandTotal 2}}</span> </td>
                             </tr>
                         </table>
-                        </form>
                     </div>
 
                     <div class="six columns">

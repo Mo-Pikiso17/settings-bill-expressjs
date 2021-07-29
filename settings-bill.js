@@ -111,18 +111,6 @@ module.exports = function billWithSettings() {
         return total >= criticalLevel;
     }
 
-    function totalClass() {
-        const total = grandTotal();
-
-        if (total >= criticalLevel) {
-            return "danger";
-        }
-
-        if (total >= warningLevel && total < criticalLevel) {
-            return "warning";
-        }
-    }
-
     return {
         setSettings,
         getSettings,
@@ -132,6 +120,5 @@ module.exports = function billWithSettings() {
         totals,
         hasReachedWarningLevel,
         hasReachedCriticalLevel,
-        totalClass
     }
 }
