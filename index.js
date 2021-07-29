@@ -100,7 +100,7 @@ app.get('/actions/:actiontype', function (req, res) {
 });
 
 
-let PORT = process.env.PORT || 3011;
+let PORT = process.env.PORT;
 
 app.listen(PORT, function () {
   console.log('App starting at port:', PORT);
