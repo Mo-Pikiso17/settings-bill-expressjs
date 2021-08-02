@@ -8,10 +8,12 @@
         </tr>
         {{#each actions}}
         <tr>
-            <td>{{type}}</td>
-            <td>{{cost}}</td>
-            <td>{{timestamp}}</td>
+            <td>{{#if (isdefined cost)}}{{type}}{{else}}{{/if}}</td>
+            <td>{{#if (isdefined cost)}}{{cost}}{{else}}{{/if}}</td>
+            <td>{{#if (isdefined cost)}}{{moment timestamp "HH:mm"}}{{else}}{{/if}}</td>
         </tr>
         {{/each}}
     </table>
 </div>
+
+ {{!-- {{#when "riskfactor" "eq" 0}}...{{/when}} --}}

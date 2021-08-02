@@ -11,10 +11,13 @@ const handlebarSetup = exphbs({
   layoutsDir: './views/layouts'
 });
 
+const moment = require('moment'); // require
+
+// moment("timestamp").format("HH:mm");
+
 const SettingsBill = require('./settings-bill');
 
 const settingsBill = SettingsBill();
-
 
 //make the style in ccs folder visible
 app.use(express.static(__dirname + '/public'));
@@ -27,17 +30,25 @@ app.use(bodyParser.json());
 app.engine('handlebars', handlebarSetup);
 app.set('view engine', 'handlebars');
 
-helpers.toFixed = function(totals){
+//Helper to round off 2 decimal place
+helpers.toFixed = function (totals) {
   return (totals).toFixed(2);
 }
 
-helpers.limit = function(totals){
-
-  if (settingsBill.hasReachedCriticalLevel()){
-    
-    return limit(totals);
-  }
+//Helper to modify the timestamp
+helpers.moment = function (totals) {
+  return moment(totals).fromNow();
 }
+
+helpers.isdefined = function (totals) {
+  return totals > 0;
+}
+
+// helpers.ifEq = function (totals) {
+//   return settingsBill.hasReachedCriticalLevel;
+// }
+
+
 
 
 //reference the handlebar file: index.handlebars
@@ -49,12 +60,14 @@ app.get('/', function (req, res) {
       totals: settingsBill.totals(),
       class: "danger"
     });
+
   } else if (settingsBill.hasReachedWarningLevel()) {
     res.render('index', {
       settings: settingsBill.getSettings(),
       totals: settingsBill.totals(),
       class: "warning"
     });
+
   } else {
     res.render('index', {
       settings: settingsBill.getSettings(),
@@ -62,7 +75,7 @@ app.get('/', function (req, res) {
     });
   }
 
-  
+
 })
 
 
@@ -72,7 +85,7 @@ app.post('/settings', function (req, res) {
     callCost: req.body.callCost,
     smsCost: req.body.smsCost,
     warningLevel: req.body.warningLevel,
-    criticalLevel: req.body.criticalLevel
+    criticalLevel: req.body.criticalLevel,
   });
 
   // note that data can be sent to the template

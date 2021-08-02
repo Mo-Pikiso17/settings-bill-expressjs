@@ -25,20 +25,23 @@ module.exports = function billWithSettings() {
     }
 
     function recordAction(action) {
+        var stop = action == 'sms' ? smsCost + grandTotal() : callCost + grandTotal()
 
-        let cost = 0;
-        if (action === 'sms') {
-            cost = smsCost;
-        }
-        else if (action === 'call') {
-            cost = callCost;
-        }
+        if (stop <= criticalLevel) {
+            let cost = 0;
+            if (action === 'sms') {
+                cost = smsCost;
+            }
+            else if (action === 'call') {
+                cost = callCost;
+            }
 
-        actionList.push({
-            type: action,
-            cost,
-            timestamp: new Date()
-        });
+            actionList.push({
+                type: action,
+                cost,
+                timestamp: new Date()
+            });
+        }
     }
 
     function actions() {
@@ -99,15 +102,15 @@ module.exports = function billWithSettings() {
     }
 
     function hasReachedWarningLevel() {
-        const total = grandTotal();
-        const reachedWarningLevel = total >= warningLevel
+        let total = grandTotal();
+        let reachedWarningLevel = total >= warningLevel
             && total < criticalLevel;
 
         return reachedWarningLevel;
     }
 
     function hasReachedCriticalLevel() {
-        const total = grandTotal();
+        let total = grandTotal();
         return total >= criticalLevel;
     }
 
